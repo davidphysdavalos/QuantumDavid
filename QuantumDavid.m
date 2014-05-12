@@ -109,5 +109,9 @@ Table[vecs[[i]],{i,pos}]
 
 IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,dim_]:=1/dim Total[Table[Abs[QuantumDotProduct[list[[i]],Table[Chop[QuantumDotProduct[vecs0[[i]],CoherentState[\[Theta],\[Phi],qubits]]],{i,dim}]]]^4,{i,1,dim}]];
 
+vecsk[qubits_,k_]:=Module[{values,vecs},
+{values, vecs} = Eigensystem[N[K[qubits]]];
+Extractbyk[k, {values, Orthogonalize[vecs]}]
+];
 End[] 
 EndPackage[]
