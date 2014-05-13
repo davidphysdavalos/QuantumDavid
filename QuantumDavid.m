@@ -17,6 +17,9 @@ K::usage = "K[qubits_]"
 testsym::usage = "testsym[bx_,qubits_,steps_]"
 Extractbyk::usage = "Extractbyk[k_,{values_,vecs_}]]"
 IPRbyCohstateSymbetter::usage= "IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,dim_]"
+vecsk::usage= "vecsk[qubits_,k_]"
+IPRbyCohstateSym::usage= "IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, vecs_}, 
+  topology_] "
 
 Begin["Private`"] 
 
@@ -107,7 +110,23 @@ pos=Flatten[Position[IntegerPart[Chop[Log[values]*Log[2,dim]/(2*I Pi)]],k]];
 Table[vecs[[i]],{i,pos}]
 ];
 
-IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,dim_]:=1/dim Total[Table[Abs[QuantumDotProduct[list[[i]],Table[Chop[QuantumDotProduct[vecs0[[i]],CoherentState[\[Theta],\[Phi],qubits]]],{i,dim}]]]^4,{i,1,dim}]];
+IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, vecs_}, 
+  topology_] := Module[{vecs0, w0, U0, U, sta, qubits, list, dim},
+  qubits = Log[2, Length[vecs[[1]]]];
+  U = matrixU[bx, qubits, topology];
+  vecs0 = Extractbyk[0, {values, Orthogonalize[vecs]}];
+  dim = vecs0 // Length;
+  w0 = Transpose[vecs0];
+  sta = Table[
+    Chop[QuantumDotProduct[vecs0[[i]], 
+      CoherentState[\[Theta], \[Phi], qubits]]], {i, dim}];
+  U0 = Dagger[w0].U.w0;
+  list = Orthogonalize[Eigenvectors[U0]];
+  1/dim Total[
+    Table[Abs[QuantumDotProduct[list[[i]], sta]]^4, {i, 1, dim}]]
+  ]
+
+IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,vecsk_]:=1/vecsk//Length Total[Table[Abs[QuantumDotProduct[list[[i]],Table[Chop[QuantumDotProduct[vecsk[[i]],CoherentState[\[Theta],\[Phi],qubits]]],{i,vecsk//Length}]]]^4,{i,1,vecsk//Length}]];
 
 vecsk[qubits_,k_]:=Module[{values,vecs},
 {values, vecs} = Eigensystem[N[K[qubits]]];
