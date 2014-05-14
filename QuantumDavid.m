@@ -126,7 +126,7 @@ IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, vecs_},
     Table[Abs[QuantumDotProduct[list[[i]], sta]]^4, {i, 1, dim}]]
   ]
 
-IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,vecsk_]:=1/vecsk//Length Total[Table[Abs[QuantumDotProduct[list[[i]],Table[Chop[QuantumDotProduct[vecsk[[i]],CoherentState[\[Theta],\[Phi],qubits]]],{i,vecsk//Length}]]]^4,{i,1,vecsk//Length}]];
+IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,vecsk_]:=1/Length[vecsk] Total[Table[Abs[QuantumDotProduct[list[[i]],Table[Chop[QuantumDotProduct[vecsk[[i]],CoherentState[\[Theta],\[Phi],qubits]]],{i,Length[vecsk]}]]]^4,{i,1,Length[vecsk]}]];
 
 vecsk[qubits_,k_]:=Module[{values,vecs},
 {values, vecs} = Eigensystem[N[K[qubits]]];
