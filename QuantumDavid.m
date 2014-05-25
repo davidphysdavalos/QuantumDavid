@@ -20,6 +20,8 @@ IPRbyCohstateSymbetter::usage= "IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,d
 vecsk::usage= "vecsk[qubits_,k_]"
 IPRbyCohstateSym::usage= "IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, vecs_}, 
   topology_] "
+ModifiedCoherentState::usage = "ModifiedCoherentState[\[Theta]_, \[Phi]_, qubits_]"
+ModifiedCoherentState2::usage = "ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_]"
 
 Begin["Private`"] 
 
@@ -135,5 +137,17 @@ vecsk[qubits_,k_]:=Module[{values,vecs},
 {values, vecs} = Eigensystem[N[K[qubits]]];
 Extractbyk[k, {values, Orthogonalize[vecs]}]
 ];
+
+ModifiedCoherentState[\[Theta]_, \[Phi]_, qubits_] := 
+ Flatten[KroneckerProduct[CoherentState[\[Theta], \[Phi], 3], 
+   PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1], 
+   CoherentState[\[Theta], \[Phi], qubits - 4]], 1]
+
+ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_] := 
+ Flatten[KroneckerProduct[CoherentState[\[Theta], \[Phi], 2], 
+   KroneckerProduct[PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1],
+     PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1]], 
+   CoherentState[\[Theta], \[Phi], qubits - 4]], 1]
+
 End[] 
 EndPackage[]
