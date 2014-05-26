@@ -22,6 +22,7 @@ IPRbyCohstateSym::usage= "IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, ve
   topology_] "
 ModifiedCoherentState::usage = "ModifiedCoherentState[\[Theta]_, \[Phi]_, qubits_]"
 ModifiedCoherentState2::usage = "ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_]"
+IPRbyStatebetter::usage = "IPRbyStatebetter[stateinput_,list_,vecsk_]"
 
 Begin["Private`"] 
 
@@ -126,12 +127,17 @@ IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, vecs_},
   list = Orthogonalize[Eigenvectors[U0]];
   1/dim Total[
     Table[Abs[QuantumDotProduct[list[[i]], sta]]^4, {i, 1, dim}]]
-  ]
+  ];
 
 IPRbyCohstateSymbetter[\[Theta]_,\[Phi]_,list_,vecsk_]:=Module[{state},
 state=Table[Chop[QuantumDotProduct[vecsk[[i]],CoherentState[\[Theta],\[Phi],Log[2,Length[vecsk[[1]]]]]]],{i,Length[vecsk]}];
 1/Length[vecsk] Total[Table[Abs[QuantumDotProduct[list[[i]],state]]^4,{i,1,Length[vecsk]}]]
-]
+];
+
+IPRbyStatebetter[stateinput_,list_,vecsk_]:=Module[{state},
+state=Table[Chop[QuantumDotProduct[vecsk[[i]],stateinput]],{i,Length[vecsk]}];
+1/Length[vecsk] Total[Table[Abs[QuantumDotProduct[list[[i]],state]]^4,{i,1,Length[vecsk]}]]
+];
 
 vecsk[qubits_,k_]:=Module[{values,vecs},
 {values, vecs} = Eigensystem[N[K[qubits]]];
@@ -141,13 +147,13 @@ Extractbyk[k, {values, Orthogonalize[vecs]}]
 ModifiedCoherentState[\[Theta]_, \[Phi]_, qubits_] := 
  Flatten[KroneckerProduct[CoherentState[\[Theta], \[Phi], 3], 
    PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1], 
-   CoherentState[\[Theta], \[Phi], qubits - 4]], 1]
+   CoherentState[\[Theta], \[Phi], qubits - 4]], 1];
 
 ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_] := 
  Flatten[KroneckerProduct[CoherentState[\[Theta], \[Phi], 2], 
    KroneckerProduct[PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1],
      PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1]], 
-   CoherentState[\[Theta], \[Phi], qubits - 4]], 1]
+   CoherentState[\[Theta], \[Phi], qubits - 4]], 1];
 
 End[] 
 EndPackage[]
