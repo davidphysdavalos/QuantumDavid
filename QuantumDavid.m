@@ -109,7 +109,7 @@ If[Length[list]==0,Print["No hay pex"],Print["Preocupate mi cabron"]]
 
 Extractbyk[k_,{values_,vecs_}]:=Module[{pos,dim},
 dim=Length[vecs[[1]]];
-pos=Flatten[Position[IntegerPart[Chop[Log[values]*Log[2,dim]/(2*I Pi)]],k]];
+pos=Flatten[Position[Round[Chop[Log[values]*Log[2,dim]/(2*I Pi)]],k]];
 Table[vecs[[i]],{i,pos}]
 ];
 
