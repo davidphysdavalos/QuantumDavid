@@ -23,6 +23,7 @@ IPRbyCohstateSym::usage= "IPRbyCohstateSym[\[Theta]_, \[Phi]_, bx_, {values_, ve
 ModifiedCoherentState::usage = "ModifiedCoherentState[\[Theta]_, \[Phi]_, qubits_]"
 ModifiedCoherentState2::usage = "ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_]"
 IPRbyStatebetter::usage = "IPRbyStatebetter[stateinput_,list_,vecsk_]"
+VectorViewer::usage = "VectorViewer[vec_] It shows the vector in Dirac notation in qubit representation."
 
 Begin["Private`"] 
 
@@ -154,6 +155,18 @@ ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_] :=
    KroneckerProduct[PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1],
      PauliMatrix[1].CoherentState[\[Theta], \[Phi], 1]], 
    CoherentState[\[Theta], \[Phi], qubits - 4]], 1];
+
+VectorViewer[vec_]:=Module[{vec2},
+Quiet[
+Total[
+DeleteCases[
+Table[
+vec2=ConstantArray[0,Length[vec]];
+vec2[[i]]=Abs[vec[[i]]];
+Sign[vec[[i]]]"|"<>ToString[TableForm[{ToBinary[vec2]}, TableSpacing->{1.2,1.2}],StandardForm]<>"\[RightAngleBracket]",{i,1,Length[vec]}],0]
+]
+]
+];
 
 End[] 
 EndPackage[]
