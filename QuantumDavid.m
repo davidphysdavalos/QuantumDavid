@@ -158,12 +158,13 @@ ModifiedCoherentState2[\[Theta]_, \[Phi]_, qubits_] :=
 
 VectorViewer[vec_]:=Module[{vec2},
 Quiet[
+Chop[
 Total[
 DeleteCases[
-Table[
-vec2=ConstantArray[0,Length[vec]];
-vec2[[i]]=Abs[vec[[i]]];
-Sign[vec[[i]]]"|"<>ToString[TableForm[{ToBinary[vec2]}, TableSpacing->{1.2,1.2}],StandardForm]<>"\[RightAngleBracket]",{i,1,Length[vec]}],0]
+Table[vec2=ConstantArray[0,Length[vec]];
+vec2[[i]]=Round[Abs[Sign[vec[[i]]]]];
+vec[[i]]*"|"<>ToString[TableForm[{ToBinary[vec2]}, TableSpacing->{1.2,1.2}],StandardForm]<>"\[RightAngleBracket]",{i,1,Length[vec]}],0]
+]
 ]
 ]
 ];
