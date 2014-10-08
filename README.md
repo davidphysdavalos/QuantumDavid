@@ -1,4 +1,4 @@
 QuantumDavid
 ============
 
-Local Routines for quantum dynamics
+Routines for quantum dynamics and static quantities, you can follow this library in carlospgmat03/libs
